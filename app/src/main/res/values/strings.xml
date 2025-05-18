@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">图像处理测试</string>
+    <string name="device_model">设备型号: %1$s</string>
+    <string name="processor_info">处理器: %1$s</string>
+    <string name="memory_usage">内存占用: %1$s MB</string>
+    <string name="inference_time">推理时间: %1$s ms</string>
+    <string name="fps_info">FPS: %1$s</string>
+</resources>
