@@ -66,6 +66,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 添加全局异常处理
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+            android.util.Log.e("CrashHandler", "应用崩溃: ${throwable.message}", throwable)
+            // 可以在这里添加崩溃日志上传或其他处理
+        }
+        
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -139,8 +145,8 @@ class MainActivity : AppCompatActivity() {
     }
     
     private fun isCameraPermissionRequired(): Boolean {
-        // 根据应用需求决定是否需要相机权限
-        return false // 当前应用不需要相机，如需要可改为true
+        // 不需要相机权限
+        return false
     }
 
     private fun openGallery() {
@@ -186,20 +192,27 @@ class MainActivity : AppCompatActivity() {
                     // 停止性能监测并获取结果
                     val performanceStats = performanceMonitor.stopMonitoring()
 
-                    // 显示处理后的图像
-                    binding.imageViewProcessed.setImageBitmap(result.processedBitmap)
-
-                    // 显示性能指标
-                    binding.tvInferenceTime.text = getString(R.string.inference_time, result.inferenceTime.toString())
-                    binding.tvFps.text = getString(R.string.fps_info, performanceStats.fps.toString())
-                    binding.tvMemoryUsage.text = getString(R.string.memory_usage, performanceStats.memoryUsageMB.toString())
-                    
-                    // 显示设备芯片信息
-                    binding.tvDeviceInfo.text = getString(R.string.device_model, result.deviceInfo)
-                    binding.tvProcessorInfo.text = getString(R.string.processor_info, result.processorInfo)
-
-                    // 显示结果布局
-                    binding.resultLayout.visibility = View.VISIBLE
+                    if (result.error != null) {
+                        // 处理错误情况
+                        Toast.makeText(this@MainActivity, "处理失败: ${result.error.message}", Toast.LENGTH_LONG).show()
+                        binding.resultLayout.visibility = View.GONE
+                    } else {
+                        // 显示处理后的图像
+                        result.processedBitmap?.let { processedBitmap ->
+                            binding.imageViewProcessed.setImageBitmap(processedBitmap)
+                            
+                            // 显示性能指标
+                            binding.tvInferenceTime.text = getString(R.string.inference_time, result.inferenceTime.toString())
+                            binding.tvFps.text = getString(R.string.fps_info, performanceStats.fps.toString())
+                            binding.tvMemoryUsage.text = getString(R.string.memory_usage, performanceStats.memoryUsageMB.toString())
+                            
+                            // 显示设备芯片信息
+                            binding.tvDeviceInfo.text = getString(R.string.device_model, result.deviceInfo)
+                            binding.tvProcessorInfo.text = getString(R.string.processor_info, result.processorInfo)
+                            
+                            binding.resultLayout.visibility = View.VISIBLE
+                        }
+                    }
                 } catch (e: Exception) {
                     Toast.makeText(this@MainActivity, "处理图片失败: ${e.message}", Toast.LENGTH_SHORT).show()
                 } finally {
