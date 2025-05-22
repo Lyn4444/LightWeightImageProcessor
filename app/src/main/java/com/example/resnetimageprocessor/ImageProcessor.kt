@@ -81,7 +81,7 @@ class ImageProcessor(private val context: Context) {
     }
     
     private fun simulateImageProcessing(bitmap: Bitmap): Bitmap {
-        // 这里模拟ResNet处理效果，实际应用中应该使用真实模型推理
+        // 这里模拟模型处理效果，实际应用中应该使用真实模型推理
         val width = bitmap.width
         val height = bitmap.height
         val result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
