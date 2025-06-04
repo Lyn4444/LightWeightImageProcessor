@@ -1,6 +1,6 @@
-# LightWeight模型图像处理测试应用
+# LightWeight模型图像处理测试应用(移动边缘设备通用模型测试，测试尺寸256*256)
 
-这是一个使用LightWeight模型进行图像处理的Android应用。该应用允许用户从相册中选择图片，使用LightWeight模型进行处理，并显示推理时间、FPS和RAM占用情况。
+这是一个使用本地模型进行图像处理的Android应用。该应用允许用户从相册中选择图片，使用LightWeight模型进行处理，并显示推理时间、FPS和RAM占用情况。
 
 ## 功能特点
 
